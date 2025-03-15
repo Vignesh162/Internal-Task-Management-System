@@ -12,7 +12,6 @@ const EmployeeDashboard = () => {
     if(!stats){
       return <div>Loading...</div>;
     }
-    console.log(stats)
   return (
     <div className="dashboard-container">
       <Sidebar/>
@@ -23,7 +22,7 @@ const EmployeeDashboard = () => {
           <TaskCard title="In Progress Tasks" count={stats.inProgressTasks} color="warning" icon="bi-clock" route="/tasks/inprogress" />
           <TaskCard title="Completed Tasks" count={stats.completedTasks} color="success" icon="bi-check-circle" route="/tasks/completed" />
           <TaskCard title="All Tasks" count={stats.allTasks} color="primary" icon="bi-list-task" route="/tasks/all" />
-          <TaskCard title="View tasks in Calender" count={1}  color="primary" icon="bi bi-calendar" route="/tasks" />
+          <TaskCard title="View tasks in Calender" count={1}  color="primary" icon="bi bi-calendar" route="/tasks/calender" />
         </div>
       </div>
     </div>

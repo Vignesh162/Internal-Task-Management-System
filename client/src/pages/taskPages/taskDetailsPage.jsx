@@ -1,13 +1,38 @@
 import React from "react"; 
-import { useLocation } from "react-router-dom";
+import {useNavigate, Navigate, useLocation } from "react-router-dom";
 import Sidebar from "../../components/sidebar";
+import axios from "axios";
+
 
 const TaskDetailsPage = () => {
   const location = useLocation();
   const task = location.state;
+  const navigate = useNavigate();
+  const [newCommentText,setNewCommentText]= React.useState("");
 
   if (!task) return <h2 className="text-center">Task not found!</h2>;
 
+  const handleAddComment = async (e) => {
+    e.preventDefault();
+    try{
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.log("No token found");
+        return;
+      }
+      console.log("Adding Comment:", newCommentText);
+      console.log("Task ID:", task._id);
+      const response = await axios.post(`http://localhost:5000/api/task/${task._id}/comment`,
+        { text: newCommentText, taskId: task._id },
+        {headers:{
+          "Authorization": `Bearer ${token}`,
+        }});
+        setNewCommentText("");
+      }catch(error){
+        console.error("Error adding comment:", error);
+      }
+    }
+  
   return (
     <>
       <Sidebar />
@@ -35,7 +60,6 @@ const TaskDetailsPage = () => {
           )}
 
           {/* Comments Section */}
-          {console.log(task.comments)}
           {task.comments && task.comments.length > 0 && (
             <div className="mt-3">
               <h5>Comments:</h5>
@@ -51,9 +75,26 @@ const TaskDetailsPage = () => {
           )}
 
           {/* Edit Task Button */}
-          <button className="btn btn-warning mt-3" onClick={() => alert("Navigate to Edit Task Page")}>
+          {/* only show if task is not completed */}
+          {task.status !== "completed" && <button className="btn btn-warning mt-3" onClick={() =>{
+            navigate("/tasks/update", {state: task});
+            }}>
             Edit Task
-          </button>
+          </button>}
+
+          {/* add comment button */}
+          <div className="form-group mt-3">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Add a comment..."
+              value={newCommentText}
+              onChange={(e) => {
+                setNewCommentText(e.target.value);
+              }}
+            />
+            <button className="btn btn-primary mt-2" onClick={handleAddComment}>Add Comment</button>
+          </div>
         </div>
       </div>
     </>

@@ -1,5 +1,5 @@
 import express from "express";
-import { createTask, getAllTasks, getTaskById, updateTask, deleteTask, getAllTasksByAssignedTo, getInProgressTasksByAssignedTo, getCompletedTasksByAssignedTo, getAllCompletedTask, getAllInProgressTask, getAllPendingTask, getPendingTasksByAssignedTo } from "../controllers/taskController.js";
+import { createTask, getAllTasks, getTaskById, updateTask, deleteTask, getAllTasksByAssignedTo, getInProgressTasksByAssignedTo, getCompletedTasksByAssignedTo, getAllCompletedTask, getAllInProgressTask, getAllPendingTask, getPendingTasksByAssignedTo, updateTaskProgress, addCommentToTask } from "../controllers/taskController.js";
 import { admin, protect } from "../middleware/authMiddleware.js";
 const router = express.Router();
 //http://localhost:5000/api/task
@@ -17,6 +17,8 @@ router.get("/allCompletedTasks",protect,admin,getAllCompletedTask) // Get all co
 router.get("/allInProgressTasks",protect,admin,getAllInProgressTask) // Get all in progress tasks
 router.get("/allPendingTasks",protect,admin,getAllPendingTask) // Get all pending tasks
 
-router.get("/:id",protect,admin, getTaskById);    // Get a single task by ID
+router.post("/:id/comment",protect, addCommentToTask); // Add a comment to a task
+router.put("/:id",protect, updateTaskProgress);     // Update a task`
+router.get("/:id",protect, getTaskById);    // Get a single task by ID
 
 export default router;

@@ -19,6 +19,8 @@ import TasksDashboard from './pages/taskPages/tasksDashboard';
 import ProtectedRoute from './components/protectedRoute';
 import AdminRoute from './components/adminRoute';
 import NewTasksPage from './pages/taskPages/newTasksPage';
+import EditTaskPage from './pages/taskPages/editTaskPage';
+import TaskCalendarPage from './pages/taskPages/taskCalenderPage';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -41,6 +43,8 @@ function App() {
         <Route path='tasks/completed' element={<CompletedTasksPage />} />
         <Route path='tasks/all' element={<AllTasksPage />} />
         <Route path='tasksDashboard' element={<TasksDashboard />} />
+        <Route path="tasks/update" element={<EditTaskPage/>}/>
+        <Route path="tasks/calender" element ={<TaskCalendarPage/>}/>
       </Route>
       {/* Admin routes */}
       <Route path="adminDashboard" element={<AdminDashboard />} />
