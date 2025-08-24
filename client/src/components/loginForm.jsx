@@ -25,7 +25,7 @@ const LoginForm = () => {
     setError(null);
     setSuccess(null);
 
-    const endpoint = 'http://localhost:5000/api/auth/login'; // Single login endpoint
+    const endpoint = 'https://internal-task-management-system.onrender.com/api/auth/login'; // Single login endpoint
 
     try {
       console.log("Login Data:", formData);

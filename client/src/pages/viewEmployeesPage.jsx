@@ -19,7 +19,7 @@ const ViewEmployeesPage = () => {
   const getEmployeeData = async() =>{
     try{
     console.log("Fetching Employees Data!");
-    const endpoint = "http://localhost:5000/api/employee";
+    const endpoint = "https://internal-task-management-system.onrender.com/api/employee";
     console.log("Fetching employee data from:", endpoint);
     
     const response = await axios.get(endpoint, {

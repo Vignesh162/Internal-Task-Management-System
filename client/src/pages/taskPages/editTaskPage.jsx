@@ -20,7 +20,7 @@ const EditTaskPage = () => {
     try {
       // Update Progress
       await axios.put(
-        `http://localhost:5000/api/task/${task._id}`,
+        `https://internal-task-management-system.onrender.com/api/task/${task._id}`,
         { progress },
         { headers: { 'Authorization': `Bearer ${token}` } }
       );

@@ -13,7 +13,7 @@ const useFetchDashboardStats = () => {
         if (!user) return; // Wait for user to load
         const token = localStorage.getItem("token");
 
-        const response = await axios.get("http://localhost:5000/api/dashboard/stats", {
+        const response = await axios.get("https://internal-task-management-system.onrender.com/api/dashboard/stats", {
           headers: { Authorization: `Bearer ${token}` },
         });
 

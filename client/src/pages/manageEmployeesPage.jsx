@@ -19,7 +19,7 @@ const ManageEmployeesPage = () => {
 
   const fetchEmployees = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/employee", {
+        const res = await axios.get("https://internal-task-management-system.onrender.com/api/employee", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setEmployees(res.data);
@@ -29,7 +29,7 @@ const ManageEmployeesPage = () => {
     };
   const fetchDepartments = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/department", {
+      const res = await axios.get("https://internal-task-management-system.onrender.com/api/department", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setDepartments(res.data); // Expecting an array of department names
@@ -54,7 +54,7 @@ const ManageEmployeesPage = () => {
     try {
       const { name, department, role, status } = formData;
 
-      await axios.put(`http://localhost:5000/api/employee`,{id:editingId,  name, department, role, status}, {
+      await axios.put(`https://internal-task-management-system.onrender.com/api/employee`,{id:editingId,  name, department, role, status}, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setEmployees((prev) =>

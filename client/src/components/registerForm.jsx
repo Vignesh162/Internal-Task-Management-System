@@ -31,7 +31,7 @@ const RegisterForm = () => {
     console.log("Form submitted:", formData);
 
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/register", formData);
+      const res = await axios.post("https://internal-task-management-system.onrender.com/api/auth/register", formData);
       if (res.status === 201) {
         console.log(res.data.message);
         alert(res.data.message);

@@ -21,7 +21,7 @@ const NewTaskAssignment = () => {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/employee"); // Replace with your API endpoint
+        const response = await axios.get("https://internal-task-management-system.onrender.com/api/employee"); // Replace with your API endpoint
         const formattedEmployees = response.data.map((emp) => ({
           value: emp._id,
           label: emp.name,
@@ -64,7 +64,7 @@ const NewTaskAssignment = () => {
   
       console.log("Sending Data:", taskData); // Debugging
   
-      const response = await axios.post("http://localhost:5000/api/task", taskData, {
+      const response = await axios.post("https://internal-task-management-system.onrender.com/api/task", taskData, {
         headers: {
           "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json",  // ✅ Important: Sending JSON

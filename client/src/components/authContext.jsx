@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     try {
-      const response = await axios.get("http://localhost:5000/api/auth/me", {
+      const response = await axios.get("https://internal-task-management-system.onrender.com/api/auth/me", {
         headers: { Authorization: `Bearer ${authToken}` },
       });
 

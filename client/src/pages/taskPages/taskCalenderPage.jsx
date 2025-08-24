@@ -20,7 +20,7 @@ const TaskCalendarPage = () => {
       if (!user || !token) return;
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/task/allTasksAssignedTo/${user.id}`,
+          `https://internal-task-management-system.onrender.com/api/task/allTasksAssignedTo/${user.id}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setTasks(response.data);

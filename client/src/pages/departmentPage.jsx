@@ -19,7 +19,7 @@ const DepartmentPage = () => {
         console.error("No token found");
         return;
       }
-      const response = await axios.get("http://localhost:5000/api/department", {
+      const response = await axios.get("https://internal-task-management-system.onrender.com/api/department", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setDepartments(response.data);
@@ -56,7 +56,7 @@ const DepartmentPage = () => {
       };
 
       const response = await axios.post(
-        "http://localhost:5000/api/department",
+        "https://internal-task-management-system.onrender.com/api/department",
         newDepartment,
         {
           headers: { Authorization: `Bearer ${token}` },

@@ -24,7 +24,7 @@ const InProgressTasksPage = () => {
         console.error("No token found");
         return;
       }
-      const endpoint = user.role === "admin"? "http://localhost:5000/api/task/allInProgressTasks":`http://localhost:5000/api/task/inProgressTasksAssignedTo/${user.id}`;
+      const endpoint = user.role === "admin"? "https://internal-task-management-system.onrender.com/api/task/allInProgressTasks":`https://internal-task-management-system.onrender.com/api/task/inProgressTasksAssignedTo/${user.id}`;
 
       const response = await axios.get(endpoint,{
         headers: {Authorization: `Bearer ${token}`}

@@ -117,11 +117,3 @@ Contributions are welcome! Follow these steps:
 6. Open a **Pull Request**  
 
 ---
-
-## 📜 License  
-
-This project is licensed under the **MIT License**.
-
----
-
-Would you like any specific changes or additional details? 🚀

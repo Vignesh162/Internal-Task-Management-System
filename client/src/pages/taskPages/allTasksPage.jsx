@@ -23,7 +23,7 @@ const AllTasksPage = () => {
 
     try {
       console.log("Fetching tasks for user:", user);
-      const endpoint = user.role=="admin"? "http://localhost:5000/api/task":`http://localhost:5000/api/task/allTasksAssignedTo/${user.id}`;
+      const endpoint = user.role=="admin"? "https://internal-task-management-system.onrender.com/api/task":`https://internal-task-management-system.onrender.com/api/task/allTasksAssignedTo/${user.id}`;
        console.log("Fetching tasks from:", endpoint);
       const token = localStorage.getItem("token");
       if (!token) {

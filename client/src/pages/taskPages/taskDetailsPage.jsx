@@ -22,7 +22,7 @@ const TaskDetailsPage = () => {
       }
       console.log("Adding Comment:", newCommentText);
       console.log("Task ID:", task._id);
-      const response = await axios.post(`http://localhost:5000/api/task/${task._id}/comment`,
+      const response = await axios.post(`https://internal-task-management-system.onrender.com/api/task/${task._id}/comment`,
         { text: newCommentText, taskId: task._id },
         {headers:{
           "Authorization": `Bearer ${token}`,
