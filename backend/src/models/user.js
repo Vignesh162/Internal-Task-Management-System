@@ -31,6 +31,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    status:{
+        type: String,
+        enum:["active","inactive"],
+        default:"active",
+    },
     task: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Task",

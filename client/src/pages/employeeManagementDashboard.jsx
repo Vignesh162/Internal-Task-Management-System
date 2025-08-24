@@ -11,8 +11,8 @@ const EmployeeManagementDashboard = () => {
       <div className="content">
         <h2 className="text-center">Employee Mangement Dashboard</h2>
         <div className="row">
-        <TaskCard title="View All Employees" color="primary" icon="bi-people" route="/viewEmployees" />
-        <TaskCard title="Manage Employees"  color="primary" icon="bi-people" route="/manageEmployees" />
+        <TaskCard title="View All Employees" color="primary" icon="bi-people" route="/viewEmployeesPage" />
+        <TaskCard title="Manage Employees"  color="primary" icon="bi-people" route="/manageEmployeesPage" />
         </div>
       </div>
     </div>

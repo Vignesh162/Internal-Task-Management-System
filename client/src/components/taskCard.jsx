@@ -1,12 +1,12 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const TaskCard = ({ title, count, color, icon, route }) => {
+const TaskCard = ({ title, count, color, icon, route,className }) => {
   const navigate = useNavigate();
 
   return (
     <div
-      className={`card text-white bg-${color} mb-3`}
+      className={`card text-white bg-${color} mb-3 ${className || ""}`}
       style={{ maxWidth: "24rem", cursor: "pointer" }}
       onClick={() => navigate(route)} // Navigate on click
     >

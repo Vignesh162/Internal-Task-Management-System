@@ -5,10 +5,13 @@ import LoginForm from './components/loginForm';
 import RegisterForm from './components/registerForm';
 import Home from './components/home';
 import Navbar from './components/navbar';
+import AboutPage from './pages/taskPages/aboutPage.jsx';
 import EmployeeDashboard from './pages/employeeDashboard';
 import AdminDashboard from './pages/adminDashboard';
 import DepartmentPage from './pages/departmentPage';
 import EmployeeManagementDashboard from './pages/employeeManagementDashboard';
+import ViewEmployeesPage from './pages/viewEmployeesPage.jsx';
+import ManageEmployeesPage from './pages/manageEmployeesPage.jsx';
 
 import NewTaskAssignment from "./pages/taskPages/newTaskAssignment";
 import InProgressTasksPage from './pages/taskPages/inProgressTasksPage';
@@ -34,6 +37,7 @@ function App() {
       <Route index element={<Home/>} />
       <Route path='login' element={<LoginForm />} />
       <Route path="register" element={<RegisterForm />} />
+      <Route path="about" element={<AboutPage/>}/>
       {/* Protected routes */}
         <Route element={<ProtectedRoute />}>
         <Route path="employeeDashboard" element={<EmployeeDashboard />} />
@@ -51,6 +55,8 @@ function App() {
       <Route path="tasks/assign" element={<NewTaskAssignment />} />
       <Route path='departmentPage' element={<DepartmentPage />} />
       <Route path='employeeManagementDashboard' element={<EmployeeManagementDashboard />} />
+      <Route path="viewEmployeesPage" element={<ViewEmployeesPage></ViewEmployeesPage>}/>
+      <Route path="manageEmployeesPage" element={<ManageEmployeesPage/>}/>
       </Route>
       </Routes>
     </BrowserRouter>

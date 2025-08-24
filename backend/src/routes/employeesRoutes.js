@@ -1,16 +1,14 @@
 import express from "express";
 import User from "../models/user.js";
+import { protect,admin } from "../middleware/authMiddleware.js";
+import { getEmployees, updateEmployee } from "../controllers/employeeController.js";
 
 const router = express.Router();
 
-router.get("/", async(req, res) => {
-    try{
-    const employees = await User.find({ role: "employee" });
-    res.status(200).json(employees);
-    }
-    catch(error){
-        res.status(500).json({error:"Failed to fetch employees", details: error.message});
-    }
-})
+// get all employees route
+router.get("/", protect, admin, getEmployees);
+
+// update employee info route
+router.put("/", protect, admin, updateEmployee);
 
 export default router;
