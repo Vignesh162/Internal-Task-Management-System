@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Card } from "react-bootstrap";
 import "bootstrap-icons/font/bootstrap-icons.css"; // Bootstrap Icons
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './index.css'
 import App from './App.jsx'
 import { AuthProvider } from "./components/authContext.jsx"; // Import the context provider
