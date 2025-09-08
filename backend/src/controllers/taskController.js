@@ -152,24 +152,44 @@ export const getAllPendingTask = async(req,res) => {
   }
 }
 
-export const updateTaskProgress = async (req,res) => {
-  try{
+export const updateTaskProgress = async (req, res) => {
+  try {
     const task = await Task.findById(req.params.id);
-    const progress = req.body.progress;
+    if (!task) {
+      return res.status(404).json({ error: "Task not found" });
+    }
+
+    // Ensure progress is a number
+    let progress = Number(req.body.progress);
+    if (isNaN(progress)) {
+      return res.status(400).json({ error: "Progress must be a valid number" });
+    }
+
+    // Clamp progress between 0 and 100
+    if (progress < 0) progress = 0;
+    if (progress > 100) progress = 100;
+
     task.progress = progress;
-    // return if no progress
-    if(!progress) return res.status(400).json({error:"Progress is required"});
-    // update task status
-    if(progress === 100) task.status = "completed";
-    else if(progress < 100 && progress > 0) task.status = "in-progress";
-    else task.status = "pending";
-    // save updated task
+
+    // Update task status automatically
+    if (progress === 100) {
+      task.status = "completed";
+    } else if (progress > 0) {
+      task.status = "in-progress";
+    } else {
+      task.status = "pending";
+    }
+
     const updatedTask = await task.save();
     res.status(200).json(updatedTask);
-  }catch(error){
-    res.status(500).json({error:"Failed to update task progress", details: error.message});
+  } catch (error) {
+    res.status(500).json({
+      error: "Failed to update task progress",
+      details: error.message,
+    });
   }
 };
+
 
 export const addCommentToTask = async (req, res) => {
   try {

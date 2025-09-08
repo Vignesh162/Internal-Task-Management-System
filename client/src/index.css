@@ -1,11 +1,18 @@
 .sidebar {
-    width: 250px;
-    background: #12223d;
-    color: white;
-    height: 100vh;
-    padding: 20px;
-    position: fixed;
-  }
+  background: #12223d;
+  color: white;
+  height: 100vh;
+  padding: 20px;
+  position: fixed;
+  width: 240px; /* default */
+  transition: width 0.3s ease;
+  overflow: hidden;
+}
+
+.sidebar.collapsed {
+  width: 70px;
+}
+
   
   .profile {
     text-align: center;
