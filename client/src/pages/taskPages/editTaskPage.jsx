@@ -58,7 +58,7 @@ const EditTaskPage = () => {
               min="0"
               max="100"
               value={progress}
-              onChange={(e) => setProgress(e.target.value)}
+              onChange={(e) => setProgress(Number(e.target.value))}
               className="form-range"
             />
             <span>{progress}%</span>

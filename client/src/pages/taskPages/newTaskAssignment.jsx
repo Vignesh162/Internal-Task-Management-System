@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Sidebar from "../../components/sidebar";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from "react-select";
 import axios from "axios";
+import { AuthContext } from "../../components/authContext";
 
 const NewTaskAssignment = () => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token")
   const [taskTitle, setTaskTitle] = useState("");
   const [taskDesc, setTaskDesc] = useState("");
   const [selectedEmployees, setSelectedEmployees] = useState([]);
@@ -21,7 +22,8 @@ const NewTaskAssignment = () => {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const response = await axios.get("https://internal-task-management-system.onrender.com/api/employee"); // Replace with your API endpoint
+        const response = await axios.get("https://internal-task-management-system.onrender.com/api/employee",
+          { headers: { 'Authorization': `Bearer ${token}` } }); // Replace with your API endpoint
         const formattedEmployees = response.data.map((emp) => ({
           value: emp._id,
           label: emp.name,
