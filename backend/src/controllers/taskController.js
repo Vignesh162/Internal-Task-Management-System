@@ -1,15 +1,14 @@
-import Task from "../models/task.js";
+import Task from "../models/task.js"; 
 import cloudinary from "cloudinary";
 
-// Configure Cloudinary (optional, needed only if you want to delete attachments)
+// Configure Cloudinary
 cloudinary.v2.config({
   cloud_name: process.env.CLOUD_NAME || "dvjkompau",
   api_key: process.env.CLOUD_API_KEY,
   api_secret: process.env.CLOUD_API_SECRET,
 });
 
-// @desc   Create a new task
-// @route  POST /api/tasks
+// ==================== CREATE TASK ====================
 export const createTask = async (req, res) => {
   try {
     let {
@@ -29,7 +28,7 @@ export const createTask = async (req, res) => {
     const newTask = new Task({
       title,
       description,
-      attachments, // Cloudinary URLs from frontend
+      attachments, // Optional Cloudinary URLs
       assignedTo,
       assignedBy,
       deadline,
@@ -46,8 +45,7 @@ export const createTask = async (req, res) => {
   }
 };
 
-// @desc   Get all tasks
-// @route  GET /api/tasks
+// ==================== GET TASKS ====================
 export const getAllTasks = async (req, res) => {
   try {
     const tasks = await Task.find()
@@ -59,8 +57,6 @@ export const getAllTasks = async (req, res) => {
   }
 };
 
-// @desc   Get task by ID
-// @route  GET /api/tasks/:id
 export const getTaskById = async (req, res) => {
   try {
     const task = await Task.findById(req.params.id)
@@ -73,31 +69,47 @@ export const getTaskById = async (req, res) => {
   }
 };
 
-// @desc   Update a task
-// @route  PUT /api/tasks/:id
+// ==================== UPDATE TASK ====================
 export const updateTask = async (req, res) => {
   try {
-    const { attachments } = req.body; // Cloudinary URLs
-    const updatedTask = await Task.findByIdAndUpdate(
-      req.params.id,
-      { ...req.body, attachments },
-      { new: true }
-    );
-    if (!updatedTask) return res.status(404).json({ error: "Task not found" });
+    const taskId = req.params.id;
+    const { progress, attachments, ...otherFields } = req.body;
+
+    const task = await Task.findById(taskId);
+    if (!task) return res.status(404).json({ error: "Task not found" });
+
+    // Update attachments if provided
+    if (attachments && attachments.length > 0) {
+      task.attachments = attachments;
+    }
+
+    // Update other fields
+    Object.keys(otherFields).forEach(key => task[key] = otherFields[key]);
+
+    // Update progress
+    if (progress !== undefined) {
+      let prog = Number(progress);
+      if (isNaN(prog)) return res.status(400).json({ error: "Progress must be a number" });
+      prog = Math.min(100, Math.max(0, prog));
+      task.progress = prog;
+      task.status = prog === 100 ? "completed" : prog > 0 ? "in-progress" : "pending";
+    }
+
+    const updatedTask = await task.save();
     res.status(200).json({ message: "Task updated successfully", task: updatedTask });
   } catch (error) {
+    console.error("Error in updateTask:", error);
     res.status(500).json({ error: "Failed to update task", details: error.message });
   }
 };
 
-// @desc   Delete a task (optional: delete attachments from Cloudinary)
-// @route  DELETE /api/tasks/:id
+// ==================== DELETE TASK ====================
 export const deleteTask = async (req, res) => {
   try {
     const task = await Task.findById(req.params.id);
     if (!task) return res.status(404).json({ error: "Task not found" });
 
-    // Optional: delete attachments from Cloudinary
+    // Delete attachments from Cloudinary (optional)
     for (const url of task.attachments) {
       const publicId = url.split("/").pop().split(".")[0];
       await cloudinary.v2.uploader.destroy(publicId);
@@ -110,8 +122,7 @@ export const deleteTask = async (req, res) => {
   }
 };
 
-// @desc   Update task progress
-// @route  PUT /api/tasks/:id/progress
+// ==================== UPDATE TASK PROGRESS ONLY ====================
 export const updateTaskProgress = async (req, res) => {
   try {
     const task = await Task.findById(req.params.id);
@@ -131,16 +142,13 @@ export const updateTaskProgress = async (req, res) => {
   }
 };
 
-// @desc   Add comment to a task
-// @route  POST /api/tasks/:id/comment
+// ==================== ADD COMMENT ====================
 export const addCommentToTask = async (req, res) => {
   try {
     const taskId = req.params.id;
     const { text } = req.body;
 
-    if (!req.user || !text) {
-      return res.status(400).json({ error: "User ID and comment text are required." });
-    }
+    if (!req.user || !text) return res.status(400).json({ error: "User ID and comment text are required." });
 
     const updatedTask = await Task.findByIdAndUpdate(
       taskId,
@@ -156,7 +164,8 @@ export const addCommentToTask = async (req, res) => {
   }
 };
 
-// ===== Task filtering by status and assignedTo =====
+// ==================== FILTER TASKS ====================
+// By assignedTo
 export const getAllTasksByAssignedTo = async (req, res) => {
   try {
     const tasks = await Task.find({ assignedTo: { $in: [req.params.id] } })
@@ -201,7 +210,7 @@ export const getPendingTasksByAssignedTo = async (req, res) => {
   }
 };
 
-// Admin routes
+// ==================== ADMIN FILTER ROUTES ====================
 export const getAllInProgressTask = async (req, res) => {
   try {
     const tasks = await Task.find({ status: "in-progress" })

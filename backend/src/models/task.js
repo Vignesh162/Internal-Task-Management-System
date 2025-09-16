@@ -11,10 +11,10 @@ const taskSchema = new mongoose.Schema(
     priority: { type: String, enum: ["Low", "Medium", "High"], required: true },
     status: { type: String, enum: ["in-progress", "completed", "pending"], default: "pending" },
     progress: { type: Number, min: 0, max: 100, default: 0 },
-    attachments: [
+   attachments: [
       {
-        url: { type: String, required: true },       // Cloudinary URL
-        public_id: { type: String, required: true }, // Cloudinary public_id
+        public_id: { type: String }, // remove `required: true`
+        url: { type: String }        // remove `required: true`
       }
     ],
     comments: [
