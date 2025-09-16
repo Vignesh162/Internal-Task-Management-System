@@ -1,29 +1,29 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react"; 
 import Sidebar from "../../components/sidebar";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from "react-select";
 import axios from "axios";
-import { AuthContext } from "../../components/authContext";
 
 const NewTaskAssignment = () => {
-  const token = localStorage.getItem("token")
+  const token = localStorage.getItem("token");
   const [taskTitle, setTaskTitle] = useState("");
   const [taskDesc, setTaskDesc] = useState("");
   const [selectedEmployees, setSelectedEmployees] = useState([]);
   const [selectedPriority, setSelectedPriority] = useState("Low");
   const [deadline, setDeadline] = useState(new Date());
   const [attachments, setAttachments] = useState([]);
+  const [employees, setEmployees] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const [employees, setEmployees] = useState([]); // ✅ Employee state
-  const [loading, setLoading] = useState(true); // ✅ Loading state
-
-  // ✅ Fetch employees from backend API
+  // Fetch employees
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const response = await axios.get("https://internal-task-management-system.onrender.com/api/employee",
-          { headers: { 'Authorization': `Bearer ${token}` } }); // Replace with your API endpoint
+        const response = await axios.get(
+          "https://internal-task-management-system.onrender.com/api/employee",
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
         const formattedEmployees = response.data.map((emp) => ({
           value: emp._id,
           label: emp.name,
@@ -36,75 +36,89 @@ const NewTaskAssignment = () => {
       }
     };
     fetchEmployees();
-  }, []);
+  }, [token]);
 
+  // Handle file selection
   const handleAttachmentChange = (e) => {
-    setAttachments([...e.target.files]); // ✅ Store multiple files in state
+    setAttachments([...e.target.files]);
   };
+
+  // Handle form submit with Cloudinary upload
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
+    if (!token) return alert("No token found");
+    if (!taskTitle || !taskDesc || selectedEmployees.length === 0)
+      return alert("Please fill all required fields!");
+
     try {
-      if (!token) {
-        console.log("No token found");
-        return;
+      const uploadedFiles = [];
+
+      // Upload each file to Cloudinary
+      for (const file of attachments) {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", "task_uploads"); // replace with your preset
+        formData.append("folder", "task_files"); // files will go to Home → task_files
+
+        const res = await axios.post(
+          "https://api.cloudinary.com/v1_1/dvjkompau/upload", // replace with your cloud name
+          formData
+        );
+
+        // Store both URL and public_id
+        uploadedFiles.push({
+          url: res.data.secure_url,
+          public_id: res.data.public_id,
+        });
       }
-  
-      if (!taskTitle || !taskDesc || selectedEmployees.length === 0) {
-        alert("Please fill all required fields!");
-        return;
-      }
-  
+
+      // Prepare task data
       const taskData = {
         title: taskTitle,
         description: taskDesc,
         deadline: deadline.toISOString(),
         priority: selectedPriority,
-        assignedTo: selectedEmployees.map((emp) => emp.value), // Send as an array
-        attachments: attachments.map((file) => `${file.name}`),
+        assignedTo: selectedEmployees.map((emp) => emp.value),
+        attachments: uploadedFiles,
       };
-  
-      console.log("Sending Data:", taskData); // Debugging
-  
-      const response = await axios.post("https://internal-task-management-system.onrender.com/api/task", taskData, {
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json",  // ✅ Important: Sending JSON
-        },
-      });
-  
+
+      await axios.post(
+        "https://internal-task-management-system.onrender.com/api/task",
+        taskData,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
       alert("Task Assigned Successfully!");
-  
-      // Reset form after successful submission
+
+      // Reset form
       setTaskTitle("");
       setTaskDesc("");
       setSelectedEmployees([]);
       setSelectedPriority("Low");
       setDeadline(new Date());
-      setAttachments(null);
-  
+      setAttachments([]);
     } catch (error) {
       console.error("Error assigning task:", error.response?.data || error.message);
     }
   };
-  
 
   return (
     <>
       <Sidebar />
       <div className="content">
         <h2 className="text-center">New Task Assignment</h2>
-        <form className="card p-3 mt-4 bg-light">
+        <form className="card p-3 mt-4 bg-light" onSubmit={handleSubmit}>
           <h4>Task Details</h4>
 
           {/* Employee Selection */}
           <div className="mb-4 mt-4">
             <label>Select Employee(s):</label>
             {loading ? (
-              <p>Loading employees...</p> // ✅ Show loading state
+              <p>Loading employees...</p>
             ) : (
               <Select
-                options={employees} // ✅ Now employees are fetched dynamically
+                options={employees}
                 isMulti
                 value={selectedEmployees}
                 onChange={setSelectedEmployees}
@@ -124,7 +138,6 @@ const NewTaskAssignment = () => {
               placeholder="Enter task title"
               value={taskTitle}
               onChange={(e) => setTaskTitle(e.target.value)}
-              aria-label="Task Title"
             />
           </div>
 
@@ -138,13 +151,12 @@ const NewTaskAssignment = () => {
               rows="3"
               value={taskDesc}
               onChange={(e) => setTaskDesc(e.target.value)}
-              aria-label="Task Description"
             ></textarea>
           </div>
 
           {/* File Upload */}
           <div className="mb-4">
-            <label htmlFor="formFile" className="form-label">Attach File</label>
+            <label htmlFor="attachments" className="form-label">Attach Files</label>
             <input
               className="form-control"
               type="file"
@@ -163,7 +175,6 @@ const NewTaskAssignment = () => {
               value={selectedPriority}
               onChange={(e) => setSelectedPriority(e.target.value)}
             >
-              <option value="" disabled>Select Priority</option>
               <option value="Low">Low</option>
               <option value="Medium">Medium</option>
               <option value="High">High</option>
@@ -180,22 +191,21 @@ const NewTaskAssignment = () => {
               dateFormat="dd/MM/yyyy"
             />
           </div>
+
+          {/* Email Notification */}
           <div className="mb-4">
             <input
               className="form-check-input"
               type="checkbox"
-              id="emaillNotification"
+              id="emailNotification"
             />
-             <label htmlFor="emaillNotification" className="form-label">Email Notification to Employee </label>
+            <label htmlFor="emailNotification" className="form-label ms-2">
+              Email Notification to Employee
+            </label>
           </div>
 
-        <button 
-            className="btn btn-primary mt-3" 
-            onClick={handleSubmit}
-            >
-            Assign Task
-        </button>
- 
+          {/* Submit */}
+          <button type="submit" className="btn btn-primary mt-3">Assign Task</button>
         </form>
       </div>
     </>

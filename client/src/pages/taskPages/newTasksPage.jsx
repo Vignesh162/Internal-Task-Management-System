@@ -18,7 +18,7 @@ const NewTasksPage = () => {
          console.error("No token found");
          return;
        }
-       const endpoint = user.role === "admin"? "https://internal-task-management-system.onrender.com/api/task/allPendingTasks":`https://internal-task-management-system.onrender.com/api/ask/pendingTasksAssignedTo/${user.id}`;
+       const endpoint = user.role === "admin"? "https://internal-task-management-system.onrender.com/api/task/allPendingTasks":`https://internal-task-management-system.onrender.com/api/task/pendingTasksAssignedTo/${user.id}`;
 
        const response = await axios.get(endpoint,{
         headers:{Authorization: `Bearer ${token}`}
