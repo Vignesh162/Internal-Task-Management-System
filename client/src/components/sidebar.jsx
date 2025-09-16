@@ -41,6 +41,9 @@ const Sidebar = () => {
             <li>
               <Link to="/employeeManagementDashBoard">👥 Employees</Link>
             </li>
+            <li>
+              <Link to="/analyticsPage">📊 Analytics</Link>
+            </li>
           </>
         )}
         <li>

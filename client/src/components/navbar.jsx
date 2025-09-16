@@ -18,7 +18,7 @@ const Navbar = () => {
       <div className="container">
         {/* Logo */}
         <Link className="navbar-brand fw-bold" to="/">
-          <img src={TaskFlowLogo3} alt="Logo"  height="65" className="me-2" />
+          <img src={TaskFlowLogo3} alt="Logo"  height="60" className="me-2" />
         </Link>
 
         {/* Navbar Toggle Button (for mobile) */}

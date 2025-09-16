@@ -24,6 +24,7 @@ import AdminRoute from './components/adminRoute';
 import NewTasksPage from './pages/taskPages/newTasksPage';
 import EditTaskPage from './pages/taskPages/editTaskPage';
 import TaskCalendarPage from './pages/taskPages/taskCalenderPage';
+import AnalyticsPage from './pages/analyticsPage';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -57,6 +58,7 @@ function App() {
       <Route path='employeeManagementDashboard' element={<EmployeeManagementDashboard />} />
       <Route path="viewEmployeesPage" element={<ViewEmployeesPage></ViewEmployeesPage>}/>
       <Route path="manageEmployeesPage" element={<ManageEmployeesPage/>}/>
+      <Route path="AnalyticsPage" element={<AnalyticsPage/>}/>
       </Route>
       </Routes>
     </BrowserRouter>
