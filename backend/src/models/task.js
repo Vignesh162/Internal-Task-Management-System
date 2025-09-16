@@ -1,92 +1,32 @@
-//  import mongoose from "mongoose";
-
-// const taskSchema = new mongoose.Schema({
-//     title: {
-//         type: String,
-//         required: true,
-//     },
-//     description: {
-//         type: String,
-//         required: true,
-//     },
-//     status: {
-//         type: String,
-//         enum: ["Pending", "In Progress", "Completed"],
-//         default: "Pending",
-//     },
-//     assignedTo: {
-//         type: mongoose.Schema.Types.ObjectId,
-//         ref: "User",
-//     },
-//     assignedBy: {
-//         type: mongoose.Schema.Types.ObjectId,
-//         ref: "User",
-//     },
-//     dueDate: {
-//         type: Date,
-//         required: true,
-//     },
-//     comments: [
-//         {
-//             comment: {
-//                 type: String,
-//                 required: true,
-//             },
-//             commentedBy: {
-//                 type: mongoose.Schema.Types.ObjectId,
-//                 ref: "User",
-//             },
-//             commentedAt: {
-//                 type: Date,
-//                 default: Date.now,
-//             },
-//         },
-//     ],
-//     progress: {
-//         type: Number,
-//         default: 0,
-//     },
-//     attachments: [
-//         {
-//             filename: {
-//                 type: String,
-//                 required: true,
-//             },
-//             path: {
-//                 type: String,
-//                 required: true,
-//             },
-//         },
-//     ],
-// });
-
-// export default mongoose.model("Task", taskSchema); 
-    
-
 import mongoose from "mongoose";
 
 const taskSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
     description: { type: String, required: true },
-    assignedTo: [{ type: mongoose.Schema.Types.ObjectId, ref: "user", required: true }], // Now an array
-    assignedBy: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: true }, 
+    assignedTo: [{ type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }],
+    assignedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     assignmentDate: { type: Date, default: Date.now },
     deadline: { type: Date, required: true },
     priority: { type: String, enum: ["Low", "Medium", "High"], required: true },
     status: { type: String, enum: ["in-progress", "completed", "pending"], default: "pending" },
     progress: { type: Number, min: 0, max: 100, default: 0 },
-    attachments: [{ type: String }], 
+    attachments: [
+      {
+        url: { type: String, required: true },       // Cloudinary URL
+        public_id: { type: String, required: true }, // Cloudinary public_id
+      }
+    ],
     comments: [
       {
-        user: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
+        user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
         text: String,
         createdAt: { type: Date, default: Date.now },
-      },
+      }
     ],
   },
   { timestamps: true }
 );
 
-const Task = mongoose.model("task", taskSchema);
+const Task = mongoose.model("Task", taskSchema);
 export default Task;
