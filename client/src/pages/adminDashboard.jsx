@@ -10,7 +10,11 @@ const AdminDashboard = () => {
   const { user } = useContext(AuthContext);
   const { stats, loading } = useFetchDashboardStats();
   if(!stats){
-    return <div>Loading...</div>;
+    return <div className="d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
   }
   return (
     <div className="dashboard-container">

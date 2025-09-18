@@ -16,7 +16,7 @@ const InProgressTasksPage = () => {
   // const inProgressTasks = tasksData.filter(task => task.status === "in-progress");
   const {user} = React.useContext(AuthContext);
   const [tasks, setTasks] = React.useState([]);
-
+  const [loading,setLoading] = React.useState(true);
   const getInProgressTasks = useCallback(async () =>{
     try{
       const token = localStorage.getItem("token");
@@ -36,6 +36,10 @@ const InProgressTasksPage = () => {
     catch(error){
       console.error("Error fetching tasks:", error.response?.data || error.message);
     }
+    finally{
+      setLoading(false);
+    }
+
   },[user]);
   React.useEffect(() => {
     if(!user){
@@ -44,7 +48,13 @@ const InProgressTasksPage = () => {
   }
   getInProgressTasks();
   },[user])
-
+  if(loading){
+    return <div className="d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
+                      <div className="spinner-border text-primary" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+            </div>
+  }
   return (
     <>
       <Sidebar />

@@ -10,6 +10,7 @@ const AllTasksPage = () => {
   const { user } = useContext(AuthContext); // ✅ Get user context properly
   //const [user,setUser] = React.useState(null)
   const [tasks, setTasks] = useState([]);
+  const [loading,setLoading] = useState(true);
 
   // useEffect(() => {
   //   const storedUser =  localStorage.getItem("user");
@@ -30,7 +31,6 @@ const AllTasksPage = () => {
         console.error("No token found");
         return;
       }
-
       const response = await axios.get(endpoint, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -39,6 +39,8 @@ const AllTasksPage = () => {
       setTasks(response.data);
     } catch (error) {
       console.error("Error fetching tasks:", error.response?.data || error.message);
+    }finally{
+      setLoading(false);
     }
   }, [user]);
 
@@ -66,6 +68,13 @@ const AllTasksPage = () => {
   //     return <span className="badge bg-info">Pending</span>;
   //   }
   // };
+  if(loading){
+    return <div className="d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
+                      <div className="spinner-border text-primary" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+            </div>
+  }
 
   return (
     <>

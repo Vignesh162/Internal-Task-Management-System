@@ -12,6 +12,7 @@ const localizer = momentLocalizer(moment);
 const TaskCalendarPage = () => {
   const [tasks, setTasks] = useState([]);
   const [selectedTask, setSelectedTask] = useState(null);
+  const [loading, setLoading] = useState(true);
   const { user } = useContext(AuthContext);
   const token = localStorage.getItem("token");
 
@@ -26,6 +27,8 @@ const TaskCalendarPage = () => {
         setTasks(response.data);
       } catch (error) {
         console.error("Error fetching tasks:", error);
+      } finally{
+        setLoading(false);
       }
     };
     fetchTasks();
@@ -44,7 +47,11 @@ const TaskCalendarPage = () => {
   const handleSelectEvent = (event) => {
     setSelectedTask(event.taskData);
   };
-
+  if(loading)return <div className="d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
+                      <div className="spinner-border text-primary" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+                    </div>
   return (
     <>
     <div className="flex h-screen">

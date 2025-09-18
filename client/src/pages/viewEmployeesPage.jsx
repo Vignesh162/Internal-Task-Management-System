@@ -4,18 +4,11 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/sidebar";
 
-
-const employeesData = [
-  { id: 1, name: "John Doe", email: "john@example.com", department: "Development", role: "Software Engineer", status: "Active" },
-  { id: 2, name: "Jane Smith", email: "jane@example.com", department: "Marketing", role: "Marketing Manager", status: "Inactive" },
-  { id: 3, name: "Mike Johnson", email: "mike@example.com", department: "HR", role: "HR Executive", status: "Active" },
-  { id: 4, name: "Emily Davis", email: "emily@example.com", department: "Finance", role: "Finance Analyst", status: "Active" },
-];
-
 const ViewEmployeesPage = () => {
   const {user,token} = useContext(AuthContext);
   const navigate = useNavigate();
   const [employees, setEmployees] = useState([]);
+  const [loading, setLoading] = useState(true);
   const getEmployeeData = async() =>{
     try{
     console.log("Fetching Employees Data!");
@@ -38,6 +31,13 @@ const ViewEmployeesPage = () => {
     }
     getEmployeeData();
     },[user]);
+  if(loading){
+    return <div className="d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
+                      <div className="spinner-border text-primary" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+            </div>
+  }
   return (
     <>
       <Sidebar user={user} />

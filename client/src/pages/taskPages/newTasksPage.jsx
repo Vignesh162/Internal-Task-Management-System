@@ -9,6 +9,7 @@ const NewTasksPage = () => {
   // const user = { name: "Admin", email: "admin@gmail.com", role: "admin" };
   const {user} = React.useContext(AuthContext);
   const [tasks, setTasks] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
   const navigate = useNavigate();
 
   const getCompletedTask = useCallback(async () =>{
@@ -29,16 +30,26 @@ const NewTasksPage = () => {
       }catch(error){
         console.error("Error fetching tasks:", error.response?.data || error.message);
       }
+      finally{
+        setLoading(false);
+      }
        }
  ,[user]);
- React.useEffect(() =>
-{
-  if(!user){
-    return;
+  React.useEffect(() =>
+  {
+    if(!user){
+      return;
+    }
+    // console.log(user);
+    getCompletedTask();
+  },[user]);
+  if(loading){
+    return <div className="d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
+                      <div className="spinner-border text-primary" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+            </div>
   }
-  // console.log(user);
-  getCompletedTask();
-},[user]);
 
 
 

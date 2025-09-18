@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
- import Sidebar from "../components/sidebar";
+import React, { useEffect, useState } from "react"; 
+import Sidebar from "../components/sidebar";
 import axios from "axios";
 import {
   PieChart, Pie, Cell, Tooltip, Legend,
@@ -10,6 +10,7 @@ import {
 const AnalyticsPage = () => {
   const token = localStorage.getItem("token");
   const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true); // ✅ Loading state
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -21,10 +22,25 @@ const AnalyticsPage = () => {
         setTasks(res.data);
       } catch (err) {
         console.error("Error fetching tasks:", err);
+      } finally {
+        setLoading(false); // ✅ Stop loading after fetch
       }
     };
     fetchTasks();
   }, [token]);
+
+  if (loading) {
+    return (
+      <>
+        <Sidebar />
+        <div className="d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+        </div>
+      </>
+    );
+  }
 
   // ---- Process Data for Charts ----
   const statusDistribution = ["pending", "in-progress", "completed"].map((status) => ({
@@ -32,7 +48,6 @@ const AnalyticsPage = () => {
     value: tasks.filter((t) => t.status === status).length,
   }));
 
-  // Monthly status distribution (group by month-year)
   const monthlyData = tasks.reduce((acc, task) => {
     const month = new Date(task.deadline).toLocaleString("default", { month: "short", year: "numeric" });
     if (!acc[month]) acc[month] = { month, pending: 0, "in-progress": 0, completed: 0 };
@@ -41,7 +56,6 @@ const AnalyticsPage = () => {
   }, {});
   const monthlyChartData = Object.values(monthlyData);
 
-  // Weekly status distribution (group by ISO week)
   const weeklyData = tasks.reduce((acc, task) => {
     const d = new Date(task.deadline);
     const week = `${d.getFullYear()}-W${Math.ceil(((d - new Date(d.getFullYear(), 0, 1)) / 86400000 + d.getDay() + 1) / 7)}`;
@@ -51,7 +65,6 @@ const AnalyticsPage = () => {
   }, {});
   const weeklyChartData = Object.values(weeklyData);
 
-  // Yearly status distribution
   const yearlyData = tasks.reduce((acc, task) => {
     const year = new Date(task.deadline).getFullYear();
     if (!acc[year]) acc[year] = { year, pending: 0, "in-progress": 0, completed: 0 };
@@ -68,7 +81,7 @@ const AnalyticsPage = () => {
       <div className="content p-4">
         <h2 className="text-center mb-4">📊 Task Analytics (Admin)</h2>
 
-        {/* Pie Chart: Current Task Status */}
+        {/* Pie Chart */}
         <div className="card p-3 mb-5 shadow bg-light">
           <h4 className="text-center">Task Status Distribution</h4>
           <ResponsiveContainer width="100%" height={300}>
@@ -92,7 +105,7 @@ const AnalyticsPage = () => {
           </ResponsiveContainer>
         </div>
 
-        {/* Bar Chart: Monthly Status */}
+        {/* Monthly Bar Chart */}
         <div className="card p-3 mb-5 shadow bg-light">
           <h4 className="text-center">Monthly Task Status</h4>
           <ResponsiveContainer width="100%" height={300}>
@@ -109,7 +122,7 @@ const AnalyticsPage = () => {
           </ResponsiveContainer>
         </div>
 
-        {/* Line Chart: Weekly Status */}
+        {/* Weekly Line Chart */}
         <div className="card p-3 mb-5 shadow bg-light">
           <h4 className="text-center">Weekly Task Trends</h4>
           <ResponsiveContainer width="100%" height={300}>
@@ -126,7 +139,7 @@ const AnalyticsPage = () => {
           </ResponsiveContainer>
         </div>
 
-        {/* Bar Chart: Yearly Status */}
+        {/* Yearly Bar Chart */}
         <div className="card p-3 mb-5 shadow bg-light">
           <h4 className="text-center">Yearly Task Status</h4>
           <ResponsiveContainer width="100%" height={300}>

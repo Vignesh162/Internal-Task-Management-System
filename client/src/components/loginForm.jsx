@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useContext } from "react";
-import { AuthContext } from "./authContext"; // Import context
 import axios from 'axios';
+import { AuthContext } from "./authContext";
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [loading, setLoading] = useState(false); // ✅ new loading state
   const navigate = useNavigate();
   const { setUser } = useContext(AuthContext);
+
   // Handle input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -24,11 +25,11 @@ const LoginForm = () => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
+    setLoading(true); // ✅ Start loading
 
-    const endpoint = 'https://internal-task-management-system.onrender.com/api/auth/login'; // Single login endpoint
+    const endpoint = 'https://internal-task-management-system.onrender.com/api/auth/login';
 
     try {
-      console.log("Login Data:", formData);
       const res = await axios.post(endpoint, formData, {
         headers: { "Content-Type": "application/json" },
       });
@@ -43,13 +44,17 @@ const LoginForm = () => {
       setSuccess("Login successful! Redirecting...");
 
       // Redirect based on user role
-      if (res.data.user.role === "admin") {
-        navigate('/adminDashboard');
-      } else {
-        navigate('/employeeDashboard');
-      }
+      setTimeout(() => {
+        if (res.data.user.role === "admin") {
+          navigate('/adminDashboard');
+        } else {
+          navigate('/employeeDashboard');
+        }
+      }, 1000);
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed');
+    } finally {
+      setLoading(false); // ✅ Stop loading
     }
   };
 
@@ -60,7 +65,6 @@ const LoginForm = () => {
           <div className="p-4 border rounded">
             <h2 className="text-center mb-4">Login</h2>
 
-            {/* Login Form */}
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label htmlFor="email" className="form-label">Email Address</label>
@@ -73,6 +77,7 @@ const LoginForm = () => {
                   value={formData.email}
                   onChange={handleInputChange}
                   required
+                  disabled={loading} // ✅ disable while logging in
                 />
               </div>
               <div className="mb-3">
@@ -86,15 +91,19 @@ const LoginForm = () => {
                   value={formData.password}
                   onChange={handleInputChange}
                   required
+                  disabled={loading} // ✅ disable while logging in
                 />
               </div>
 
-              {/* Display messages */}
               {error && <p className="text-danger text-center">{error}</p>}
               {success && <p className="text-success text-center">{success}</p>}
 
-              <button type="submit" className="btn btn-primary w-100">
-                Login
+              <button 
+                type="submit" 
+                className="btn btn-primary w-100"
+                disabled={loading} // ✅ disable button
+              >
+                {loading ? "Logging in..." : "Login"} {/* ✅ show progress */}
               </button>
 
               <p className="text-center mt-3">
