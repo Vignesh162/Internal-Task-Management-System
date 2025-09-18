@@ -50,7 +50,7 @@ export const getAllTasks = async (req, res) => {
   try {
     const tasks = await Task.find()
       .populate("assignedTo assignedBy", "name email")
-      .populate("comments.user", "name email");
+      .populate("comments.user", "name email").sort({ deadline: 1 });
     res.status(200).json(tasks);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch tasks", details: error.message });
@@ -61,7 +61,7 @@ export const getTaskById = async (req, res) => {
   try {
     const task = await Task.findById(req.params.id)
       .populate("assignedTo assignedBy", "name email")
-      .populate("comments.user", "name email");
+      .populate("comments.user", "name email").sort({ deadline: 1 });
     if (!task) return res.status(404).json({ error: "Task not found" });
     res.status(200).json(task);
   } catch (error) {
@@ -170,7 +170,7 @@ export const getAllTasksByAssignedTo = async (req, res) => {
   try {
     const tasks = await Task.find({ assignedTo: { $in: [req.params.id] } })
       .populate("assignedTo assignedBy", "name email")
-      .populate("comments.user", "name email");
+      .populate("comments.user", "name email").sort({ deadline: 1 });
     res.status(200).json(tasks);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch tasks", details: error.message });
@@ -181,7 +181,7 @@ export const getInProgressTasksByAssignedTo = async (req, res) => {
   try {
     const tasks = await Task.find({ status: "in-progress", assignedTo: { $in: [req.params.id] } })
       .populate("assignedTo assignedBy", "name email")
-      .populate("comments.user", "name email");
+      .populate("comments.user", "name email").sort({ deadline: 1 });
     res.status(200).json(tasks);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch tasks", details: error.message });
@@ -192,7 +192,7 @@ export const getCompletedTasksByAssignedTo = async (req, res) => {
   try {
     const tasks = await Task.find({ status: "completed", assignedTo: { $in: [req.params.id] } })
       .populate("assignedTo assignedBy", "name email")
-      .populate("comments.user", "name email");
+      .populate("comments.user", "name email").sort({ deadline: 1 });
     res.status(200).json(tasks);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch tasks", details: error.message });
@@ -203,7 +203,7 @@ export const getPendingTasksByAssignedTo = async (req, res) => {
   try {
     const tasks = await Task.find({ status: "pending", assignedTo: { $in: [req.params.id] } })
       .populate("assignedTo assignedBy", "name email")
-      .populate("comments.user", "name email");
+      .populate("comments.user", "name email").sort({ deadline: 1 });
     res.status(200).json(tasks);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch tasks", details: error.message });
@@ -215,7 +215,7 @@ export const getAllInProgressTask = async (req, res) => {
   try {
     const tasks = await Task.find({ status: "in-progress" })
       .populate("assignedTo assignedBy", "name email")
-      .populate("comments.user", "name email");
+      .populate("comments.user", "name email").sort({ deadline: 1 });
     res.status(200).json(tasks);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch tasks", details: error.message });
@@ -226,7 +226,7 @@ export const getAllCompletedTask = async (req, res) => {
   try {
     const tasks = await Task.find({ status: "completed" })
       .populate("assignedTo assignedBy", "name email")
-      .populate("comments.user", "name email");
+      .populate("comments.user", "name email").sort({ deadline: 1 });
     res.status(200).json(tasks);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch tasks", details: error.message });
@@ -237,7 +237,7 @@ export const getAllPendingTask = async (req, res) => {
   try {
     const tasks = await Task.find({ status: "pending" })
       .populate("assignedTo assignedBy", "name email")
-      .populate("comments.user", "name email");
+      .populate("comments.user", "name email").sort({ deadline: 1 });
     res.status(200).json(tasks);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch tasks", details: error.message });
