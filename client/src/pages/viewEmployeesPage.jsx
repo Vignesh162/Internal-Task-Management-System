@@ -22,6 +22,8 @@ const ViewEmployeesPage = () => {
     setEmployees(response?.data);
     }catch(err){
       console.log(err);
+    }finally{
+      setLoading(false);
     } 
   }
     React.useEffect(() => {
