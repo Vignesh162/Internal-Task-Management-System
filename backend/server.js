@@ -18,6 +18,10 @@ app.use(cors());
 
 // Routes
 
+//ping
+app.get("/", async(req,res)=>{
+    res.status(400).json({ message:"Server running"});
+});
 // Task Routes
 app.use("/api/task", taskRoutes);
 // Authentication Routes
