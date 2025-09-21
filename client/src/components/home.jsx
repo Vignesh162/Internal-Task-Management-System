@@ -9,7 +9,7 @@ const Home = () => {
 
   const heroImages = [
     "/adminDashboard.png",
-    "/completedTask.png",
+    "/completedTask2.png",
     "/taskDetail.png",
      "/newTaskAssignment.png",
      "/analytics.png"
