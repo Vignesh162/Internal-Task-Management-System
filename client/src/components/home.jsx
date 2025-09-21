@@ -90,7 +90,49 @@ const Home = () => {
                 transition={{ duration: 1, ease: "easeInOut" }}
               />
             </AnimatePresence>
+          </div>
+        </div>
+      </div>
+            {/* Feature Highlights Section */}
+      <div className="container py-5">
+        <h2 className="text-center fw-bold mb-5 text-dark">
+          Why Choose Our Task Management App?
+        </h2>
+        <div className="row g-4">
+          <div className="col-md-4">
+            <div className="card shadow border-0 h-100 text-center p-4">
+              <div className="mb-3">
+                <span style={{ fontSize: "3rem" }}>✅</span>
+              </div>
+              <h5 className="fw-bold">Track Progress</h5>
+              <p className="text-muted">
+                Monitor tasks in real-time and never miss a deadline again.
+              </p>
+            </div>
+          </div>
 
+          <div className="col-md-4">
+            <div className="card shadow border-0 h-100 text-center p-4">
+              <div className="mb-3">
+                <span style={{ fontSize: "3rem" }}>👥</span>
+              </div>
+              <h5 className="fw-bold">Collaborate Seamlessly</h5>
+              <p className="text-muted">
+                Assign tasks, share files, and work together efficiently.
+              </p>
+            </div>
+          </div>
+
+          <div className="col-md-4">
+            <div className="card shadow border-0 h-100 text-center p-4">
+              <div className="mb-3">
+                <span style={{ fontSize: "3rem" }}>📊</span>
+              </div>
+              <h5 className="fw-bold">Stay Organized</h5>
+              <p className="text-muted">
+                Keep everything in one place with structured task management.
+              </p>
+            </div>
           </div>
         </div>
       </div>
