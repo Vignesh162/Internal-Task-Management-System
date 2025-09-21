@@ -1,49 +1,63 @@
+/* Sidebar container */
 .sidebar {
-  background: #12223d;
+  background-color: #2C3E50; /* softer navy */
   color: white;
   height: 100vh;
   padding: 20px;
   position: fixed;
-  width: 240px; /* default */
-  transition: width 0.3s ease;
+  width: 240px; /* default width */
+  transition: width 0.3s ease, background-color 0.3s ease;
   overflow: hidden;
 }
 
+/* Collapsed sidebar */
 .sidebar.collapsed {
   width: 70px;
 }
 
-  
-  .profile {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .profile-pic {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-  }
-  
-  .nav li {
-    padding: 10px 0;
-  }
-  
-  .nav a {
-    color: white;
-    text-decoration: none;
-  }
-  
-  .content {
-    margin-left: 270px;
-    padding: 20px;
-  }
+/* Profile section */
+.profile {
+  text-align: center;
+  margin-bottom: 20px;
+}
 
-  .row{
-    justify-content: space-evenly;
-    margin-top: 2rem;
-  }
-  
+.profile-pic {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+
+/* Navigation links */
+.nav li {
+  padding: 10px 0;
+}
+
+.nav a {
+  color: white;
+  text-decoration: none;
+  display: block;
+  padding: 8px 12px;
+  transition: background 0.2s ease, border-radius 0.2s ease;
+}
+
+.nav a:hover {
+  background: rgba(255, 255, 255, 0.1); /* subtle hover */
+  border-radius: 8px;
+}
+
+/* Main content area (push right of sidebar) */
+.content {
+  margin-left: 270px; /* matches sidebar width + padding */
+  padding: 20px;
+}
+
+/* Row styling */
+.row {
+  justify-content: space-evenly;
+  margin-top: 2rem;
+}
+
+/* Hover effect cards */
 .hover-card {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
@@ -54,11 +68,20 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
-.sidebar {
-  background-color: #12263f; /* softer navy */
-}
-.sidebar a:hover {
-  background: rgba(255,255,255,0.1);
+/* Collapse button */
+.collapse-btn {
+  display: block;               /* make it a block element */
+  margin: 20px auto 0 auto;     /* top margin + center horizontally */
+  padding: 8px 12px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: none;
   border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
+.collapse-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
