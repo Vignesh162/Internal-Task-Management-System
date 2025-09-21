@@ -1,13 +1,25 @@
-import React, { useContext, useState, useEffect } from "react";  
+import React, { useContext, useState, useEffect } from "react";   
 import { AuthContext } from "./authContext";
 import { Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Home = () => {
   const { user } = useContext(AuthContext);
-  const [animateHero, setAnimateHero] = useState(false);
+  const [currentImage, setCurrentImage] = useState(0);
+
+  const heroImages = [
+    "/adminDashboard.png",
+    "/completedTask.png",
+    "/taskDetail.png",
+     "/newTaskAssignment.png",
+     "/analytics.png"
+  ];
 
   useEffect(() => {
-    setAnimateHero(true); // trigger animation on mount
+    const interval = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % heroImages.length);
+    }, 4000); // change image every 4 seconds
+    return () => clearInterval(interval);
   }, []);
 
   const getStartedLink = !user
@@ -27,12 +39,11 @@ const Home = () => {
           minHeight: "90vh",
           background: "linear-gradient(135deg, #e3f2fd 0%, #ffffff 100%)",
           padding: "3rem",
-          opacity: animateHero ? 1 : 0,
-          transform: animateHero ? "translateY(0)" : "translateY(20px)",
-          transition: "opacity 1s ease, transform 1s ease",
+          position: "relative",
+          overflow: "hidden",
         }}
       >
-        <div className="row align-items-center">
+        <div className="row align-items-center w-100">
           {/* Left side - text */}
           <div className="col-md-6 text-center text-md-start">
             <h1 className="display-3 fw-bold text-primary mb-3">
@@ -45,13 +56,7 @@ const Home = () => {
             <Link
               to={getStartedLink}
               className="btn btn-primary btn-lg px-5 py-3 me-3"
-              style={{
-                borderRadius: "50px",
-                transition: "all 0.3s ease",
-                fontWeight: "600",
-              }}
-              onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
-              onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+              style={{ borderRadius: "50px", fontWeight: "600" }}
             >
               {buttonText}
             </Link>
@@ -64,67 +69,28 @@ const Home = () => {
             </Link>
           </div>
 
-          {/* Right side - illustration */}
-          <div className="col-md-6 mt-5 mt-md-0 text-center">
-            <img
-              src="/adminDashboard2.png"
-              alt="Task management illustration"
-              className="img-fluid"
-              style={{
-                height: "50vh",        // occupy 50% of viewport height
-                width: "100%",          // fill container width
-                objectFit: "contain",   // maintain aspect ratio
-                transition: "transform 0.5s ease, opacity 1s ease",
-                transform: animateHero ? "scale(1)" : "scale(0.95)",
-                opacity: animateHero ? 1 : 0,
-              }}
-              onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
-              onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
-            />
-          </div>
-        </div>
-      </div>
+          {/* Right side - sliding hero image */}
+          <div className="col-md-6 mt-5 mt-md-0" style={{ height: "50vh", position: "relative" }}>
+            <AnimatePresence>
+              <motion.img
+                key={currentImage}
+                src={heroImages[currentImage]}
+                alt="Task management illustration"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                }}
+                initial={{ y: "100%", opacity: 0 }}   // new comes from bottom
+                animate={{ y: "0%", opacity: 1 }}     // fills in to center
+                exit={{ y: "-100%", opacity: 0 }}     // old leaves up
+                transition={{ duration: 1, ease: "easeInOut" }}
+              />
+            </AnimatePresence>
 
-      {/* Feature Highlights Section */}
-      <div className="container py-5">
-        <h2 className="text-center fw-bold mb-5 text-dark">
-          Why Choose Our Task Management App?
-        </h2>
-        <div className="row g-4">
-          <div className="col-md-4">
-            <div className="card shadow border-0 h-100 text-center p-4">
-              <div className="mb-3">
-                <span style={{ fontSize: "3rem" }}>✅</span>
-              </div>
-              <h5 className="fw-bold">Track Progress</h5>
-              <p className="text-muted">
-                Monitor tasks in real-time and never miss a deadline again.
-              </p>
-            </div>
-          </div>
-
-          <div className="col-md-4">
-            <div className="card shadow border-0 h-100 text-center p-4">
-              <div className="mb-3">
-                <span style={{ fontSize: "3rem" }}>👥</span>
-              </div>
-              <h5 className="fw-bold">Collaborate Seamlessly</h5>
-              <p className="text-muted">
-                Assign tasks, share files, and work together efficiently.
-              </p>
-            </div>
-          </div>
-
-          <div className="col-md-4">
-            <div className="card shadow border-0 h-100 text-center p-4">
-              <div className="mb-3">
-                <span style={{ fontSize: "3rem" }}>📊</span>
-              </div>
-              <h5 className="fw-bold">Stay Organized</h5>
-              <p className="text-muted">
-                Keep everything in one place with structured task management.
-              </p>
-            </div>
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 /* Sidebar container */
 .sidebar {
-  background-color: #2C3E50; /* softer navy */
+  background-color: #113d68; /* softer navy */
   color: white;
   height: 100vh;
   padding: 20px;
@@ -84,4 +84,16 @@
 .collapse-btn:hover {
   background-color: rgba(255, 255, 255, 0.2);
   transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .hero-image-container {
+    height: 30vh !important; /* smaller height on tablets/phones */
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-image-container {
+    height: 25vh !important; /* compact height for very small screens */
+  }
 }

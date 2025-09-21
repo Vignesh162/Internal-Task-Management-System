@@ -12,7 +12,7 @@ const AdminDashboard = () => {
 
   if (!stats) {
     return (
-      <div className="d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
+      <div className="d-flex justify-content-center align-items-center  " style={{ height: "100vh" }}>
         <div className="spinner-border text-primary" role="status">
           <span className="visually-hidden">Loading...</span>
         </div>
@@ -26,7 +26,7 @@ const AdminDashboard = () => {
       <div className="content p-4">
         {/* Greeting */}
         <div className="d-flex justify-content-between align-items-center mb-3">
-          <h2 className="fw-bold">Welcome, {user?.name || "Admin"}</h2>
+          <h2 className="fw-bold text-center">Welcome, {user?.name || "Admin"}</h2>
           <span className="badge bg-secondary fs-6">{user?.role}</span>
         </div>
 
